@@ -1,9 +1,11 @@
-import Test2 from './Component/Test2'
+import ProductList from './Component/ProductList'
+import Home from './Component/Home';
 
 function App() {
   return (
     <div>
-      <Test2 />
+      {/* <Home /> */}
+      <ProductList />
     </div>
   );
 }

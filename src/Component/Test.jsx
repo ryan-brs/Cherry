@@ -51,6 +51,7 @@ export default function App() {
                 setTimeout(() => {
                   setData([...data, newData]);
 
+
                   resolve();
                 }, 1000);
               }),

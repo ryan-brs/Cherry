@@ -29,23 +29,22 @@ const Test2 = () => {
     axios.get('http://206.189.39.185:5031/api/Product')
       .then((response) => {
         setProducts(response.data.data);
-        console.log(response)
+        // console.log(response)
       })
-    }, []);
-    // console.log(products)
-    
-    const product = products.map((product) => {
-      return {
-        productId: product.productId,
-        productName: product.productName,
-        description: product.desciption,
-        price: product.price,
-        price1212: product.price1212
-      };
-    })
-    console.log(product)
-    
-  
+  }, []);
+  console.log(products.data)
+
+  const product = products.map((product) => {
+    return {
+      productId: product.productId,
+      productName: product.productName,
+      description: product.desciption,
+      price: product.price,
+      price1212: product.price1212
+    };
+  })
+  console.log(product)
+
   const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
     Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -65,16 +64,15 @@ const Test2 = () => {
     ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
   }
-  
+
   // const product = [
   //   { productId: 1, productName: "cherry1", description: "good cherry", price: 50, price1212: 45 }
   // ]
-
   return (
-    <MaterialTable 
+    <MaterialTable
       title="Products Management"
-      icons={tableIcons}    
-      const columns = {[
+      icons={tableIcons}
+      const columns={[
         { title: "ID", field: "productId" },
         { title: "Product", field: "productName" },
         { title: "Description", field: "description" },
@@ -82,16 +80,16 @@ const Test2 = () => {
         { title: "Price1212", field: "price1212" }
       ]}
       data={product}
-      // editable={{
-      //   onRowAdd: newProduct => 
-      //     new Promise((resolve, reject) => {
-      //       const addProduct=[...product, newProduct]
-      //       setProducts([...addProduct])
-      //       resolve()
-      //     })
-      // }}
+    // editable={{
+    //   onRowAdd: newProduct => 
+    //     new Promise((resolve, reject) => {
+    //       const addProduct=[...product, newProduct]
+    //       setProducts([...addProduct])
+    //       resolve()
+    //     })
+    // }}
 
-    
+
     />
   )
 }
