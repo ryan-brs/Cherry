@@ -1,9 +1,11 @@
 import '../index.css'
-import React, { useEffect } from 'react'
-import { useState } from 'react';
+import React, { useEffect, useState, forwardRef } from 'react'
+import { useHistory } from 'react-router';
 import axios from 'axios';
+import { Container, Nav, Navbar } from 'react-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap';
+import { logout } from './PrivateRoute'
 import MaterialTable from "material-table";
-import { forwardRef } from 'react';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -32,7 +34,6 @@ const ProductList = () => {
     axios.get(`${baseURL}/Product`)
       .then((response) => {
         setProducts(response.data.data);
-        // console.log(response.data)
       })
   }, []);
 
@@ -46,7 +47,6 @@ const ProductList = () => {
       productAgent: product.productAgent
     };
   })
-  // console.log(product)
 
   const addRowHandler = (newData, resolve) => {
     axios.post(`${baseURL}/Product/ProductCreate`, {
@@ -60,11 +60,15 @@ const ProductList = () => {
         setProducts([...addProduct])
         resolve()
       })
-    // console.log(newData) 
+  }
+
+  const history = useHistory()
+  const handleLogOut = () => {
+    history.push('/')
+    logout()
   }
 
   function deleteRowHanlder(oldData, resolve) {
-    // console.log(oldData.productId)
     axios.delete(`${baseURL}/Product/${oldData.productId}`)
       .then((response) => {
         const index = oldData.tableData.id;
@@ -83,14 +87,13 @@ const ProductList = () => {
       "productId": parseInt(newData.productId),
       "productName": newData.productName,
       "desciption": newData.desciption,
-      // "price": parseInt(newData.price),
       "price1212": parseInt(newData.price1212)
     })
       .then((response) => {
         const dataUpdate = [...product];
         const index = oldData.tableData.id;
         dataUpdate[index] = newData;
-        setProducts([dataUpdate]);
+        setProducts([...dataUpdate]);
       })
       .catch(error => {
         alert('Update Failed');
@@ -120,57 +123,53 @@ const ProductList = () => {
   }
 
   return (
-    <MaterialTable
-      title="Products Management Test 3"
-      icons={tableIcons}
-      const columns={[
-        { title: "Product", field: "productName" },
-        { title: "Description", field: "desciption" },
-        { title: "Price", field: "price" },
-        { title: "Price1212", field: "price1212" },
-      ]}
-      data={product}
-      options={
-        { actionsColumnIndex: -1, addRowPosition: "first" }
-      }
-      editable={{
-        onRowAdd: newData =>
-          new Promise((resolve) => {
-            addRowHandler(newData, resolve)
-          }),
+    <div>
+     <Container>
+        <Nav defaultActiveKey="/home" as="ul">
+          <Navbar.Brand><h4>Cherry Products Management</h4></Navbar.Brand>
+          <LinkContainer to='/' style={{color:'black'}}>
+            <Nav.Link >Home</Nav.Link>
+          </LinkContainer>
+          <LinkContainer to='/' style={{color:'black'}}>
+            <Nav.Link onClick={handleLogOut}>Log Out</Nav.Link>
+          </LinkContainer>
+        </Nav>
+     </Container>
 
-        onRowDelete: oldData =>
-          new Promise((resolve) => {
-            deleteRowHanlder(oldData, resolve)
-          }),
-
-        onRowUpdate: (newData, oldData) => {
-          new Promise((resolve) => {
-            updateRowHanlder(newData, oldData, resolve)
-          })
+      <MaterialTable
+        // title="Cherry Products Management"
+        icons={tableIcons}
+        const columns={[
+          { title: "Product", field: "productName" },
+          { title: "Description", field: "desciption" },
+          { title: "Price", field: "price" },
+          { title: "Price1212", field: "price1212" },
+        ]}
+        data={product}
+        options={
+          { actionsColumnIndex: -1, addRowPosition: "first",
+            showTitle: false,
+            exportButton: true,
+            headerStyle: { position: 'sticky', top: 0 }, maxBodyHeight: '70vh' }
         }
-      }}
+        editable={{
+          onRowAdd: newData =>
+            new Promise((resolve) => {
+              addRowHandler(newData, resolve)
+            }),
 
-      detailPanel={[
-        {
-          tolltip: "More Details",
-          render: product => {
-            return (
-              <table className='table'>
-                <tr className='th'>
-                  <th>Product ID</th>
-                  <th>Product Agent</th>
-                </tr>
-                <tr>
-                  <td>{product.productId}</td>
-                  <td>{product.productAgent}</td>
-                </tr>
-              </table>
-            )
-          }
-        }
-      ]}
-    />
+          onRowDelete: oldData =>
+            new Promise((resolve) => {
+              deleteRowHanlder(oldData, resolve)
+            }),
+
+          onRowUpdate: (newData, oldData) =>
+            new Promise((resolve) => {
+              updateRowHanlder(newData, oldData, resolve)
+            })
+        }}
+      />
+    </div>
   )
 }
 

@@ -1,0 +1,42 @@
+.form {
+  margin: 50px auto;
+  padding: 60px;
+  border: black 1px solid;
+  width: 500px;
+}
+
+.form label {
+  display: block;
+  margin: 10px auto;
+  box-sizing: border-box;
+  width: 200px;
+  text-align: left;
+}
+
+.form input {
+  margin: 0 auto;
+  width: 200px;
+  box-sizing: border-box;
+}
+
+.form div {
+  margin: 20 auto;
+  text-align: center;
+}
+
+.navbar {
+  width: 100px;
+  text-align: center;
+}
+
+.navbar li {
+  /* display: block; */
+  text-decoration: none;
+  color: black;
+  list-style: none;
+}
+
+.carousel img {
+  width: 60vw;
+  height: 50vh;
+}

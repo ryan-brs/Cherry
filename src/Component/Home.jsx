@@ -1,70 +1,69 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
+import { Container, Nav, Dropdown, Navbar, NavItem, Carousel } from 'react-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap'
+import React from 'react'
+import '../App.css'
 
-
-export default function ButtonAppBar() {
-
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
-
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  
+const Home = () => {
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <div>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              aria-label="menu"
-              onClick={handleMenu}
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>Log in</MenuItem>
-                <MenuItem onClick={handleClose}>Manage</MenuItem>
-              </Menu>
-          </div>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <b>Cherry Products Management</b>
-          </Typography>
-          
-        </Toolbar>
-      </AppBar>
-    </Box>
-  );
+    <>
+      <div style={{ backgroundColor: '#FFC300' }}>
+        <Nav>
+          <Container style={{ textAlign: 'center' }}>
+            <Navbar.Brand ><h2 style={{ marginTop: '30px' }}>Cherry Products Management</h2></Navbar.Brand>
+          </Container>
+          <Dropdown as={NavItem} style={{ marginTop: '35px', marginRight: '10px' }}>
+            <Dropdown.Toggle variant="dark" size='sm' id="dropdown-basic">
+              Menue
+            </Dropdown.Toggle>
+            <Dropdown.Menu >
+              <Dropdown.Item>
+                <LinkContainer to='/login' style={{ color: 'black' }}>
+                  <Nav.Link>LOGIN</Nav.Link>
+                </LinkContainer>
+              </Dropdown.Item>
+              <Dropdown.Item>
+                <LinkContainer to='/signup' style={{ color: 'black' }}>
+                  <Nav.Link eventKey="link-1">SIGNUP</Nav.Link>
+                </LinkContainer>
+              </Dropdown.Item>
+              <Dropdown.Item>
+                <LinkContainer to='/productlist' style={{ color: 'black' }}>
+                  <Nav.Link eventKey="link-1">Management</Nav.Link>
+                </LinkContainer>
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </Nav>
+      </div>
+      <Container style={{marginTop:'100px'}}>
+        <Carousel fade className='carousel' >
+          <Carousel.Item >
+            <img
+              className="d-block w-100"
+              src="https://www.globaltimes.cn/Portals/0/attachment/2020/2020-11-29/5046d941-7a9f-4404-8903-b149547a2508.jpeg"
+              alt="First slide"
+            />
+          </Carousel.Item>
+          <Carousel.Item>
+            <img
+              className="d-block w-100"
+              src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/high-angle-view-of-cherries-on-pink-table-royalty-free-image-1584714228.jpg"
+              alt="Second slide"
+            />
+          </Carousel.Item>
+          <Carousel.Item>
+            <img
+              className="d-block w-100"
+              src="https://assets.bonappetit.com/photos/60ef61f34d6cfb72ea6baeec/master/pass/Sweet-Sour-Cherries.jpg"
+              alt="Third slide"
+            />
+          </Carousel.Item>
+        </Carousel>
+      </Container>
+    </>
+  )
 }
+
+export default Home
+
+
