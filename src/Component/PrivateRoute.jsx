@@ -1,20 +1,22 @@
 import React from 'react'
+import cookie from 'react-cookies'
 import { Route, Redirect } from 'react-router-dom'
 // import { isLogin } from './Log'
 
 export const logout = () => {
-  localStorage.removeItem('userid')
-  sessionStorage.removeItem('userid')
+  cookie.remove('userId')
+  sessionStorage.removeItem('userId')
 }
 
 function PrivateRoute({ component:Component, ...rest}) {
-  const haveLocalUserId = localStorage.getItem('userid')
-  const haveSessionUserId = sessionStorage.getItem('userid')
+  const haveCookieUserId = cookie.load('userId')
+  const haveSessionUserId = sessionStorage.getItem('userId')
+  console.log('cookies', haveCookieUserId)
   return (
     <Route 
       {...rest}
       render={props => 
-        (haveLocalUserId || haveSessionUserId) ? <Component {...props}/> : <Redirect to='/login' />
+        (haveCookieUserId || haveSessionUserId) ? <Component {...props}/> : <Redirect to='/login' />
       }
     />
   )

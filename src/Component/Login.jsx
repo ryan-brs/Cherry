@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import cookie from 'react-cookies'
 import axios from 'axios';
 import { useHistory, Link } from 'react-router-dom'
 import '../App.css';
@@ -22,17 +23,26 @@ const Login = () => {
   const history = useHistory()
 
   const login = (details) => {
+    const expires = new Date()
+    expires.setDate(Date.now() + 1000 * 60 * 60 * 24 * 1)
     axios.post(`${baseURL}/User/UserLogin`, {
       "userName": details.name,
       "password": details.password,
     })
       .then((res) => {
-        if (res.status === 200 && checkbox === true) {
-          localStorage.setItem('userid', res.data.data.userId);
+        if (res.status === 200 && checkbox) {
+          cookie.save(
+            'userId',
+            res.data.data.userId,
+            {
+              path:'/',
+              expires
+            }
+          )
           history.push('/productlist');
         }
-        if (res.status === 200) {
-          sessionStorage.setItem('userid', res.data.data.userId);
+        if (res.status === 200 && !checkbox) {
+          sessionStorage.setItem('userId', res.data.data.userId);
           history.push('/productlist');
         }
       })
