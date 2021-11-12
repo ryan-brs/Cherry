@@ -1,7 +1,6 @@
 import React from 'react'
 import cookie from 'react-cookies'
 import { Route, Redirect } from 'react-router-dom'
-// import { isLogin } from './Log'
 
 export const logout = () => {
   cookie.remove('userId')
@@ -11,7 +10,7 @@ export const logout = () => {
 function PrivateRoute({ component:Component, ...rest}) {
   const haveCookieUserId = cookie.load('userId')
   const haveSessionUserId = sessionStorage.getItem('userId')
-  console.log('cookies', haveCookieUserId)
+  console.log('cookies', cookie)
   return (
     <Route 
       {...rest}

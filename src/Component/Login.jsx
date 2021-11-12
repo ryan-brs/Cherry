@@ -23,20 +23,22 @@ const Login = () => {
   const history = useHistory()
 
   const login = (details) => {
-    const expires = new Date()
-    expires.setDate(Date.now() + 1000 * 60 * 60 * 24 * 1)
+    // const expires = new Date()
+    // expires.setDate(Date.now() + 1000 * 60)
     axios.post(`${baseURL}/User/UserLogin`, {
       "userName": details.name,
       "password": details.password,
     })
       .then((res) => {
+        // console.log(res.data.data.token)
         if (res.status === 200 && checkbox) {
           cookie.save(
             'userId',
             res.data.data.userId,
             {
               path:'/',
-              expires
+              // expires,
+              maxAge: 60
             }
           )
           history.push('/productlist');
