@@ -4,6 +4,7 @@ import Login from './Component/Login';
 import Signup from './Component/Signup';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import PrivateRoute from './Component/PrivateRoute'
+import OrderList from './Component/OrderList';
 
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <PrivateRoute path='/productlist' component={ProductList} />
         <Route path='/login' component={Login} />
         <Route path='/signup' component={Signup} />
+        <Route path='/orderlist' component={OrderList} />
       </Switch>
     </Router>
   );

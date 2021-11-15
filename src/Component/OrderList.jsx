@@ -4,7 +4,6 @@ import { useHistory } from 'react-router';
 import axios from 'axios';
 import { Container, Nav, Navbar } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap';
-import { logout } from './PrivateRoute'
 import MaterialTable from "material-table";
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -22,87 +21,31 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 
+const OrderList = () => {
 
-
-const ProductList = () => {
-
-  const [products, setProducts] = useState([])
+  const [orders, setOrders] = useState([])
   const baseURL = "http://206.189.39.185:5031/api"
 
-
   useEffect(() => {
-    axios.get(`${baseURL}/Product`)
+    axios.get(`${baseURL}/Order/GetOrderList/userId/status`)
       .then((response) => {
-        setProducts(response.data.data);
-        console.log(response)
+        setOrders(response.data.data)
       })
   }, []);
+  console.log(orders)
 
-  const product = products.map((product) => {
+  const order = orders.map(order => {
     return {
-      productId: product.productId,
-      productName: product.productName,
-      desciption: product.desciption,
-      price: product.price,
-      price1212: product.price1212,
-      productAgent: product.productAgent,
-      imageUrl: (product.imageUrl && product.imageUrl.includes('{')) && JSON.parse(product.imageUrl).url
-    };
+      productId: order.productId,
+      productName: order.productName,
+      price: order.price,
+      productDimension: order.productDimension,
+      recipient: order.recipient,
+      recipientAddr: order.recipientAddr,
+      recipientCity: order.recipientCity
+    }
   })
-
-  const addRowHandler = (newData, resolve) => {
-    axios.post(`${baseURL}/Product/ProductCreate`, {
-      "productName": newData.productName,
-      "desciption": newData.desciption,
-      "price": parseInt(newData.price),
-      "price1212": parseInt(newData.price1212)
-    })
-      .then((response) => {
-        const addProduct = [...product, newData]
-        setProducts([...addProduct])
-        resolve()
-      })
-  }
-
-  const history = useHistory()
-  const handleLogOut = () => {
-    history.push('/')
-    logout()
-  }
-
-  function deleteRowHanlder(oldData, resolve) {
-    axios.delete(`${baseURL}/Product/${oldData.productId}`)
-      .then((response) => {
-        const index = oldData.tableData.id;
-        const deleteProduct = [...product];
-        deleteProduct.splice(index, 1);
-        setProducts([...deleteProduct]);
-        resolve();
-      })
-      .catch(error => {
-        alert("delete failed");
-      })
-  }
-
-  function updateRowHanlder(newData, oldData, resolve) {
-    axios.put(`${baseURL}/Product/ProductUpdate`, {
-      "productId": parseInt(newData.productId),
-      "productName": newData.productName,
-      "desciption": newData.desciption,
-      "price1212": parseInt(newData.price1212)
-    })
-      .then((response) => {
-        const dataUpdate = [...product];
-        const index = oldData.tableData.id;
-        dataUpdate[index] = newData;
-        setProducts([...dataUpdate]);
-      })
-      .catch(error => {
-        alert('Update Failed');
-      })
-    resolve();
-  }
-
+  console.log(order)
 
   const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -126,7 +69,7 @@ const ProductList = () => {
 
   return (
     <div>
-      <Container>
+      {/* <Container>
         <Nav defaultActiveKey="/home" as="ul">
           <Navbar.Brand><h4>Cherry Products Management</h4></Navbar.Brand>
           <LinkContainer to='/' style={{ color: 'black' }}>
@@ -136,7 +79,7 @@ const ProductList = () => {
             <Nav.Link onClick={handleLogOut}>Log Out</Nav.Link>
           </LinkContainer>
         </Nav>
-      </Container>
+      </Container> */}
 
       <MaterialTable
         icons={tableIcons}
@@ -144,10 +87,12 @@ const ProductList = () => {
           {
             title: 'Product Image',
             field: 'imageUrl',
-            render: product => {
-              return (
-                product.imageUrl ? <img style={{ width: '110px', height: '120px' }} src={product.imageUrl} alt='' /> : <span>No Product Img</span>
-              )
+            render: (product) => {
+              if (product.imageUrl) {
+                return (
+                  <img style={{ width: '110px', height: '120px' }} src={JSON.parse(product.imageUrl).url} alt='No Img' />
+                )
+              }
             }
           },
           { title: "Product", field: "productName" },
@@ -155,34 +100,34 @@ const ProductList = () => {
           { title: "Price", field: "price" },
           { title: "Price1212", field: "price1212" },
         ]}
-        data={product}
-        options={
-          {
-            actionsColumnIndex: -1, addRowPosition: "first",
-            showTitle: false,
-            exportButton: true,
-            headerStyle: { position: 'sticky', top: 0 }, maxBodyHeight: '70vh'
-          }
-        }
-        editable={{
-          onRowAdd: newData =>
-            new Promise((resolve) => {
-              addRowHandler(newData, resolve)
-            }),
+        // data={orders}
+        // options={
+        //   {
+        //     actionsColumnIndex: -1, addRowPosition: "first",
+        //     showTitle: false,
+        //     exportButton: true,
+        //     headerStyle: { position: 'sticky', top: 0 }, maxBodyHeight: '70vh'
+        //   }
+        // }
+        // editable={{
+        //   onRowAdd: newData =>
+        //     new Promise((resolve) => {
+        //       addRowHandler(newData, resolve)
+        //     }),
 
-          onRowDelete: oldData =>
-            new Promise((resolve) => {
-              deleteRowHanlder(oldData, resolve)
-            }),
+        //   onRowDelete: oldData =>
+        //     new Promise((resolve) => {
+        //       deleteRowHanlder(oldData, resolve)
+        //     }),
 
-          onRowUpdate: (newData, oldData) =>
-            new Promise((resolve) => {
-              updateRowHanlder(newData, oldData, resolve)
-            })
-        }}
+        //   onRowUpdate: (newData, oldData) =>
+        //     new Promise((resolve) => {
+        //       updateRowHanlder(newData, oldData, resolve)
+        //     })
+        // }}
       />
     </div>
   )
 }
 
-export default ProductList
+export default OrderList

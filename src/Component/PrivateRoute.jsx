@@ -10,7 +10,6 @@ export const logout = () => {
 function PrivateRoute({ component:Component, ...rest}) {
   const haveCookieUserId = cookie.load('userId')
   const haveSessionUserId = sessionStorage.getItem('userId')
-  console.log('cookies', cookie)
   return (
     <Route 
       {...rest}

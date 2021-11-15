@@ -38,7 +38,7 @@ const Login = () => {
             {
               path:'/',
               // expires,
-              maxAge: 60
+              maxAge: 60 * 60 * 24 * 7
             }
           )
           history.push('/productlist');
