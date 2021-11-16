@@ -34,7 +34,6 @@ const ProductList = () => {
     axios.get(`${baseURL}/Product`)
       .then((response) => {
         setProducts(response.data.data);
-        console.log(response)
       })
   }, []);
 
@@ -46,7 +45,7 @@ const ProductList = () => {
       price: product.price,
       price1212: product.price1212,
       productAgent: product.productAgent,
-      imageUrl: (product.imageUrl && product.imageUrl.includes('{')) && JSON.parse(product.imageUrl).url
+      imageUrl: (product.imageUrl && product.imageUrl.includes('{')) && JSON.parse(product.imageUrl).url 
     };
   })
 
@@ -160,7 +159,6 @@ const ProductList = () => {
           {
             actionsColumnIndex: -1, addRowPosition: "first",
             showTitle: false,
-            exportButton: true,
             headerStyle: { position: 'sticky', top: 0 }, maxBodyHeight: '70vh'
           }
         }

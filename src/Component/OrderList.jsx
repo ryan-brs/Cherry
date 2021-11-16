@@ -4,6 +4,7 @@ import { useHistory } from 'react-router';
 import axios from 'axios';
 import { Container, Nav, Navbar } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap';
+import XLSX from 'xlsx';
 import MaterialTable from "material-table";
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -25,14 +26,16 @@ const OrderList = () => {
 
   const [orders, setOrders] = useState([])
   const baseURL = "http://206.189.39.185:5031/api"
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
+    setIsLoading(true)
     axios.get(`${baseURL}/Order/GetOrderList/userId/status`)
       .then((response) => {
         setOrders(response.data.data)
+        setIsLoading(false)
       })
   }, []);
-  console.log(orders)
 
   const order = orders.map(order => {
     return {
@@ -42,10 +45,19 @@ const OrderList = () => {
       productDimension: order.productDimension,
       recipient: order.recipient,
       recipientAddr: order.recipientAddr,
-      recipientCity: order.recipientCity
     }
   })
-  console.log(order)
+
+  const downloadExcel = () => {
+    const workSheet = XLSX.utils.json_to_sheet(order);
+    const workBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workBook, workSheet, 'orders');
+    let buf = XLSX.write(workBook, {bookType: 'xlsx', type: 'buffer'});
+    XLSX.write(workBook, {bookType: 'xlsx', type: 'binary'});
+    XLSX.writeFile(workBook, 'OrdersList.xlsx');
+  }
+
+ 
 
   const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -82,49 +94,32 @@ const OrderList = () => {
       </Container> */}
 
       <MaterialTable
+        title={<h3>Order List</h3>}
         icons={tableIcons}
+        isLoading={isLoading}
         const columns={[
-          {
-            title: 'Product Image',
-            field: 'imageUrl',
-            render: (product) => {
-              if (product.imageUrl) {
-                return (
-                  <img style={{ width: '110px', height: '120px' }} src={JSON.parse(product.imageUrl).url} alt='No Img' />
-                )
-              }
-            }
-          },
+          { title: "Product ID", field: "productId" },
           { title: "Product", field: "productName" },
-          { title: "Description", field: "desciption" },
           { title: "Price", field: "price" },
-          { title: "Price1212", field: "price1212" },
+          { title: "Product Dimension", field: "productDimension" },
+          { title: "Recipient", field: "recipient" },
+          { title: "Recipient Address", field: "recipientAddr" }
         ]}
-        // data={orders}
-        // options={
-        //   {
-        //     actionsColumnIndex: -1, addRowPosition: "first",
-        //     showTitle: false,
-        //     exportButton: true,
-        //     headerStyle: { position: 'sticky', top: 0 }, maxBodyHeight: '70vh'
-        //   }
-        // }
-        // editable={{
-        //   onRowAdd: newData =>
-        //     new Promise((resolve) => {
-        //       addRowHandler(newData, resolve)
-        //     }),
+        data={order}
+        options={
+          {
+            headerStyle: { position: 'sticky', top: 0 }, maxBodyHeight: '70vh'
+          }
+        }
 
-        //   onRowDelete: oldData =>
-        //     new Promise((resolve) => {
-        //       deleteRowHanlder(oldData, resolve)
-        //     }),
+        actions={[
+          {icon:() => <button style={{fontSize: 'small', width: '80px'}}>Export</button>,
+          tooltip:'Export to Excel',
+          onClick:() => downloadExcel(),
+          isFreeAction:true
+          }
+        ]}
 
-        //   onRowUpdate: (newData, oldData) =>
-        //     new Promise((resolve) => {
-        //       updateRowHanlder(newData, oldData, resolve)
-        //     })
-        // }}
       />
     </div>
   )
