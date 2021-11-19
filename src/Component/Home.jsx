@@ -31,11 +31,16 @@ const Home = () => {
                   <Nav.Link eventKey="link-1">Management</Nav.Link>
                 </LinkContainer>
               </Dropdown.Item>
+              <Dropdown.Item>
+                <LinkContainer to='/orderlist' style={{ color: 'black' }}>
+                  <Nav.Link eventKey="link-1">Orders</Nav.Link>
+                </LinkContainer>
+              </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </Nav>
       </div>
-      <Container style={{marginTop:'100px'}}>
+      <Container style={{ marginTop: '100px' }}>
         <Carousel fade className='carousel' >
           <Carousel.Item >
             <img

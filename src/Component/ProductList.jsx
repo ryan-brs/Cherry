@@ -21,13 +21,21 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import LoadForm from './loadForm';
+import cookie from 'react-cookies'
 
 
 
 const ProductList = () => {
 
+  const [showDialog, setShowDialog] = useState(false)
+
   const [products, setProducts] = useState([])
   const baseURL = "http://206.189.39.185:5031/api"
+
+  const toggleShowDialog = () => {
+    setShowDialog(!showDialog)
+  }
 
 
   useEffect(() => {
@@ -48,14 +56,23 @@ const ProductList = () => {
       imageUrl: (product.imageUrl && product.imageUrl.includes('{')) && JSON.parse(product.imageUrl).url 
     };
   })
+  
+  const updateHanlder = (update) => {
+    setProducts([...update])
+    console.log(product)
+  }
 
   const addRowHandler = (newData, resolve) => {
+    const cookieToken = cookie.load('token')
+    const header = new Headers()
+    header.append('Access', cookieToken)
+
     axios.post(`${baseURL}/Product/ProductCreate`, {
       "productName": newData.productName,
       "desciption": newData.desciption,
       "price": parseInt(newData.price),
       "price1212": parseInt(newData.price1212)
-    })
+    }, header)
       .then((response) => {
         const addProduct = [...product, newData]
         setProducts([...addProduct])
@@ -88,7 +105,7 @@ const ProductList = () => {
       "productId": parseInt(newData.productId),
       "productName": newData.productName,
       "desciption": newData.desciption,
-      "price1212": parseInt(newData.price1212)
+      "price1212": parseInt(newData.price1212),
     })
       .then((response) => {
         const dataUpdate = [...product];
@@ -131,11 +148,19 @@ const ProductList = () => {
           <LinkContainer to='/' style={{ color: 'black' }}>
             <Nav.Link >Home</Nav.Link>
           </LinkContainer>
+          <LinkContainer to='orderlist' style={{ color: 'black' }}>
+            <Nav.Link >Orders</Nav.Link>
+          </LinkContainer>
           <LinkContainer to='/' style={{ color: 'black' }}>
             <Nav.Link onClick={handleLogOut}>Log Out</Nav.Link>
           </LinkContainer>
         </Nav>
       </Container>
+      
+      {showDialog && <LoadForm onClose={toggleShowDialog} 
+      products={product}
+      imageUpdate={updateHanlder}
+      />}
 
       <MaterialTable
         icons={tableIcons}
@@ -149,9 +174,9 @@ const ProductList = () => {
               )
             }
           },
+          { title: "Product ID", field: "productId" },
           { title: "Product", field: "productName" },
           { title: "Description", field: "desciption" },
-          { title: "Price", field: "price" },
           { title: "Price1212", field: "price1212" },
         ]}
         data={product}
@@ -162,6 +187,16 @@ const ProductList = () => {
             headerStyle: { position: 'sticky', top: 0 }, maxBodyHeight: '70vh'
           }
         }
+
+        actions={[
+          {
+            icon: () => <button style={{fontSize: 'small', width: '100px'}}>Upload Image</button>,
+            onClick: () => toggleShowDialog(),
+            tooltip:'Upload Product Image',
+            isFreeAction: true
+          }
+        ]}
+
         editable={{
           onRowAdd: newData =>
             new Promise((resolve) => {

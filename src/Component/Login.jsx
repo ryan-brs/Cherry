@@ -33,8 +33,8 @@ const Login = () => {
         // console.log(res.data.data.token)
         if (res.status === 200 && checkbox) {
           cookie.save(
-            'userId',
-            res.data.data.userId,
+            'token',
+            res.data.data.token,
             {
               path:'/',
               // expires,

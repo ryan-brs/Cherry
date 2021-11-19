@@ -1,6 +1,7 @@
 import '../index.css'
 import React, { useEffect, useState, forwardRef } from 'react'
 import { useHistory } from 'react-router';
+import { logout } from './PrivateRoute'
 import axios from 'axios';
 import { Container, Nav, Navbar } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap';
@@ -36,6 +37,12 @@ const OrderList = () => {
         setIsLoading(false)
       })
   }, []);
+
+  const history = useHistory()
+  const handleLogOut = () => {
+    history.push('/')
+    logout()
+  }
 
   const order = orders.map(order => {
     return {
@@ -81,17 +88,20 @@ const OrderList = () => {
 
   return (
     <div>
-      {/* <Container>
+      <Container>
         <Nav defaultActiveKey="/home" as="ul">
           <Navbar.Brand><h4>Cherry Products Management</h4></Navbar.Brand>
           <LinkContainer to='/' style={{ color: 'black' }}>
             <Nav.Link >Home</Nav.Link>
           </LinkContainer>
+          <LinkContainer to='productlist' style={{ color: 'black' }}>
+            <Nav.Link >Management</Nav.Link>
+          </LinkContainer>
           <LinkContainer to='/' style={{ color: 'black' }}>
             <Nav.Link onClick={handleLogOut}>Log Out</Nav.Link>
           </LinkContainer>
         </Nav>
-      </Container> */}
+      </Container>
 
       <MaterialTable
         title={<h3>Order List</h3>}

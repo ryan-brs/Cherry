@@ -3,13 +3,13 @@ import cookie from 'react-cookies'
 import { Route, Redirect } from 'react-router-dom'
 
 export const logout = () => {
-  cookie.remove('userId')
-  sessionStorage.removeItem('userId')
+  cookie.remove('token')
+  sessionStorage.removeItem('token')
 }
 
 function PrivateRoute({ component:Component, ...rest}) {
-  const haveCookieUserId = cookie.load('userId')
-  const haveSessionUserId = sessionStorage.getItem('userId')
+  const haveCookieUserId = cookie.load('token')
+  const haveSessionUserId = sessionStorage.getItem('token')
   return (
     <Route 
       {...rest}
