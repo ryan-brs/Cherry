@@ -147,16 +147,16 @@ const ProductList = () => {
   return (
     <div>
       <Container>
-        <Nav defaultActiveKey="/home" as="ul">
+        <Nav>
           <Navbar.Brand><h4>Cherry Products Management</h4></Navbar.Brand>
           <LinkContainer to='/' style={{ color: 'black' }}>
-            <Nav.Link >Home</Nav.Link>
+            <Nav.Link><Button variant='outline-primary' size='sm'>Home</Button></Nav.Link>
           </LinkContainer>
           <LinkContainer to='orderlist' style={{ color: 'black' }}>
-            <Nav.Link >Orders</Nav.Link>
+            <Nav.Link><Button variant='outline-primary' size='sm'>Orders</Button></Nav.Link>
           </LinkContainer>
           <LinkContainer to='/' style={{ color: 'black' }}>
-            <Nav.Link onClick={handleLogOut}>Log Out</Nav.Link>
+            <Nav.Link onClick={handleLogOut}><Button variant='outline-primary' size='sm'>Log out</Button></Nav.Link>
           </LinkContainer>
         </Nav>
       </Container>

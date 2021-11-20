@@ -3,7 +3,7 @@ import React, { useEffect, useState, forwardRef } from 'react'
 import { useHistory } from 'react-router';
 import { logout } from './PrivateRoute'
 import axios from 'axios';
-import { Container, Nav, Navbar } from 'react-bootstrap'
+import { Container, Nav, Navbar, Button } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap';
 import XLSX from 'xlsx';
 import MaterialTable from "material-table";
@@ -92,13 +92,13 @@ const OrderList = () => {
         <Nav defaultActiveKey="/home" as="ul">
           <Navbar.Brand><h4>Cherry Products Management</h4></Navbar.Brand>
           <LinkContainer to='/' style={{ color: 'black' }}>
-            <Nav.Link >Home</Nav.Link>
+            <Nav.Link ><Button variant='outline-primary' size='sm'>Home</Button></Nav.Link>
           </LinkContainer>
           <LinkContainer to='productlist' style={{ color: 'black' }}>
-            <Nav.Link >Management</Nav.Link>
+            <Nav.Link ><Button variant='outline-primary' size='sm'>Management</Button></Nav.Link>
           </LinkContainer>
           <LinkContainer to='/' style={{ color: 'black' }}>
-            <Nav.Link onClick={handleLogOut}>Log Out</Nav.Link>
+            <Nav.Link onClick={handleLogOut}><Button variant='outline-primary' size='sm'>Log out</Button></Nav.Link>
           </LinkContainer>
         </Nav>
       </Container>
@@ -123,9 +123,9 @@ const OrderList = () => {
         }
 
         actions={[
-          {icon:() => <button style={{fontSize: 'small', width: '80px'}}>Export</button>,
-          tooltip:'Export to Excel',
+          {icon:() => <Button style={{fontSize: 'small'}}>Export</Button>,
           onClick:() => downloadExcel(),
+          tooltip:'Export to Excel',
           isFreeAction:true
           }
         ]}
