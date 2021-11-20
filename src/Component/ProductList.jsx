@@ -2,7 +2,7 @@ import '../index.css'
 import React, { useEffect, useState, forwardRef } from 'react'
 import { useHistory } from 'react-router';
 import axios from 'axios';
-import { Container, Nav, Navbar } from 'react-bootstrap'
+import { Container, Nav, Navbar, Button } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap';
 import { logout } from './PrivateRoute'
 import MaterialTable from "material-table";
@@ -195,7 +195,7 @@ const ProductList = () => {
 
         actions={[
           {
-            icon: () => <button style={{ fontSize: 'small', width: '100px' }}>Upload Image</button>,
+            icon: () => <Button style={{ fontSize: 'small'}}>Upload Image</Button>,
             onClick: (event, rowData) => {
               toggleShowDialog()
               setRowId(rowData.productId)

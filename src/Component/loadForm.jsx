@@ -69,13 +69,6 @@ const LoadForm = ({ onClose, imageUpdate, products, rowId }) => {
         type="submit"
         onClick={submitImage}
       >Submit</Button>
-      {/* <form className='form' onSubmit={submitImage} >
-        <div>
-          <label htmlFor="upload"><h3>Upload Image</h3></label>
-          <input type="file" name='upload' id='upload' onChange={e => UploadImage(e)} />
-          <input type="submit" />
-        </div>
-      </form> */}
       <Button 
       variant='danger'
       style={{marginLeft:'10px', marginBottom:'16px'}}
