@@ -41,25 +41,33 @@ const ProductList = () => {
   useEffect(() => {
     axios.get(`${baseURL}/Product`)
       .then((response) => {
-        setProducts(response.data.data);
+        let data = response.data.data
+        for(let prod of data) {
+          if(prod.imageUrl) {
+            prod.imageUrl = JSON.parse(prod.imageUrl).url
+          }
+        }
+        setProducts(data);
       })
   }, []);
 
   const product = products.map((product) => {
-    return {
+    const productDetails = {
       productId: product.productId,
       productName: product.productName,
       desciption: product.desciption,
       price: product.price,
       price1212: product.price1212,
       productAgent: product.productAgent,
-      imageUrl: (product.imageUrl && product.imageUrl.includes('{')) && JSON.parse(product.imageUrl).url 
-    };
+      imageUrl: product.imageUrl
+    }
+    return productDetails
+
   })
-  
+
   const updateHanlder = (update) => {
     setProducts([...update])
-    console.log(product)
+    console.log(update)
   }
 
   const addRowHandler = (newData, resolve) => {
@@ -156,10 +164,10 @@ const ProductList = () => {
           </LinkContainer>
         </Nav>
       </Container>
-      
-      {showDialog && <LoadForm onClose={toggleShowDialog} 
-      products={product}
-      imageUpdate={updateHanlder}
+
+      {showDialog && <LoadForm onClose={toggleShowDialog}
+        products={product}
+        imageUpdate={updateHanlder}
       />}
 
       <MaterialTable
@@ -190,10 +198,10 @@ const ProductList = () => {
 
         actions={[
           {
-            icon: () => <button style={{fontSize: 'small', width: '100px'}}>Upload Image</button>,
+            icon: () => <button style={{ fontSize: 'small', width: '100px' }}>Upload Image</button>,
             onClick: () => toggleShowDialog(),
-            tooltip:'Upload Product Image',
-            isFreeAction: true
+            tooltip: 'Upload Product Image',
+            // isFreeAction: true
           }
         ]}
 

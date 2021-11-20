@@ -30,7 +30,7 @@ const LoadForm = ({onClose, imageUpdate, products}) => {
       .then(() => {
         const dataUpdate = [...products];
         const index = seletedProduct.tableData.id;
-        dataUpdate[index].imageUrl = imageUrl;
+        dataUpdate[index].imageUrl = imageUrl
         console.log(dataUpdate)
         imageUpdate(dataUpdate)
       })
