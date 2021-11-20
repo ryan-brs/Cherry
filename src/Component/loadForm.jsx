@@ -1,9 +1,10 @@
 import axios from 'axios'
 import { useState } from 'react'
 import '../App.css'
+import { Form, Button, Container } from 'react-bootstrap'
 
 
-const LoadForm = ({onClose, imageUpdate, products, rowId}) => {
+const LoadForm = ({ onClose, imageUpdate, products, rowId }) => {
   // const [inputId, setInputId] = useState()
   const [upload, setUpload] = useState()
   const UploadImage = (e) => {
@@ -13,8 +14,8 @@ const LoadForm = ({onClose, imageUpdate, products, rowId}) => {
 
   const matchId = (imageUrl) => {
     let seletedProduct = {}
-    for(let product of products) {
-      if(rowId === product.productId) {
+    for (let product of products) {
+      if (rowId === product.productId) {
         seletedProduct = product
       }
     }
@@ -45,7 +46,6 @@ const LoadForm = ({onClose, imageUpdate, products, rowId}) => {
     axios.post('http://206.189.39.185:5031/api/Common/UploadImage', formdata)
       .then(res => {
         matchId(res.data)
-        
       })
       .catch(err => {
         console.log(err)
@@ -53,18 +53,35 @@ const LoadForm = ({onClose, imageUpdate, products, rowId}) => {
   }
 
   return (
-   <>
-      <form className='form'  onSubmit={submitImage} >
+    <Container 
+    style={{ 
+      width: '500px', 
+      display:'flex', 
+      alignItems:'flex-end', 
+      marginTop:'30px' }}>
+      <Form.Group controlId="formFile" className="mb-3">
+        <h4>Choose Image</h4>
+        <Form.Control type="file"  onChange={e => UploadImage(e)} />
+      </Form.Group>
+      <Button
+        className="btn btn-primary btn-large centerButton"
+        style={{height:'38px', marginLeft:'10px', marginBottom:'16px'}}
+        type="submit"
+        onClick={submitImage}
+      >Submit</Button>
+      {/* <form className='form' onSubmit={submitImage} >
         <div>
-          {/* <label htmlFor="id">Product ID</label>
-          <input type="text" id='id' onChange={(e) => setInputId(e.target.value)} /> */}
           <label htmlFor="upload"><h3>Upload Image</h3></label>
-          <input type="file" name='upload' id='upload' onChange={e => UploadImage(e)}/>
+          <input type="file" name='upload' id='upload' onChange={e => UploadImage(e)} />
           <input type="submit" />
         </div>
-      </form>
-      <button onClick={onClose}>X</button>
-   </>
+      </form> */}
+      <Button 
+      variant='danger'
+      style={{marginLeft:'10px', marginBottom:'16px'}}
+      onClick={onClose}
+      >Cancle</Button>
+    </Container>
   )
 }
 

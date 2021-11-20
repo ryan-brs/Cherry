@@ -29,7 +29,6 @@ import cookie from 'react-cookies'
 const ProductList = () => {
   const [rowId, setRowId] = useState()
   const [showDialog, setShowDialog] = useState(false)
-  const [isRowId, setIsRowId] = useState(false)
 
   const [products, setProducts] = useState([])
   const baseURL = "http://206.189.39.185:5031/api"
@@ -38,13 +37,6 @@ const ProductList = () => {
     setShowDialog(!showDialog)
   }
 
-  const matchRowId = (rowData) => {
-    for(let rowProd of product) {
-      if(rowProd.productId === rowData.productId) {
-        setIsRowId(true)
-      }
-    }
-  }
 
   useEffect(() => {
     axios.get(`${baseURL}/Product`)
