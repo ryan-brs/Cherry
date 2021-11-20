@@ -27,8 +27,9 @@ import cookie from 'react-cookies'
 
 
 const ProductList = () => {
-
+  const [rowId, setRowId] = useState()
   const [showDialog, setShowDialog] = useState(false)
+  const [isRowId, setIsRowId] = useState(false)
 
   const [products, setProducts] = useState([])
   const baseURL = "http://206.189.39.185:5031/api"
@@ -37,13 +38,20 @@ const ProductList = () => {
     setShowDialog(!showDialog)
   }
 
+  const matchRowId = (rowData) => {
+    for(let rowProd of product) {
+      if(rowProd.productId === rowData.productId) {
+        setIsRowId(true)
+      }
+    }
+  }
 
   useEffect(() => {
     axios.get(`${baseURL}/Product`)
       .then((response) => {
         let data = response.data.data
-        for(let prod of data) {
-          if(prod.imageUrl) {
+        for (let prod of data) {
+          if (prod.imageUrl) {
             prod.imageUrl = JSON.parse(prod.imageUrl).url
           }
         }
@@ -52,7 +60,7 @@ const ProductList = () => {
   }, []);
 
   const product = products.map((product) => {
-    const productDetails = {
+    return {
       productId: product.productId,
       productName: product.productName,
       desciption: product.desciption,
@@ -61,13 +69,10 @@ const ProductList = () => {
       productAgent: product.productAgent,
       imageUrl: product.imageUrl
     }
-    return productDetails
-
   })
 
   const updateHanlder = (update) => {
     setProducts([...update])
-    console.log(update)
   }
 
   const addRowHandler = (newData, resolve) => {
@@ -127,7 +132,6 @@ const ProductList = () => {
     resolve();
   }
 
-
   const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
     Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -168,6 +172,7 @@ const ProductList = () => {
       {showDialog && <LoadForm onClose={toggleShowDialog}
         products={product}
         imageUpdate={updateHanlder}
+        rowId={rowId}
       />}
 
       <MaterialTable
@@ -199,9 +204,11 @@ const ProductList = () => {
         actions={[
           {
             icon: () => <button style={{ fontSize: 'small', width: '100px' }}>Upload Image</button>,
-            onClick: () => toggleShowDialog(),
+            onClick: (event, rowData) => {
+              toggleShowDialog()
+              setRowId(rowData.productId)
+            },
             tooltip: 'Upload Product Image',
-            // isFreeAction: true
           }
         ]}
 
