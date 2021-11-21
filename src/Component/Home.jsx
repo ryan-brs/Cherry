@@ -28,7 +28,7 @@ const Home = () => {
               </Dropdown.Item>
               <Dropdown.Item>
                 <LinkContainer to='/productlist' style={{ color: 'black' }}>
-                  <Nav.Link eventKey="link-1">Management</Nav.Link>
+                  <Nav.Link eventKey="link-1">Products List</Nav.Link>
                 </LinkContainer>
               </Dropdown.Item>
               <Dropdown.Item>

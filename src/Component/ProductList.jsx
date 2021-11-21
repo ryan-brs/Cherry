@@ -65,7 +65,6 @@ const ProductList = () => {
       imageUrl: product.imageUrl
     }
   })
-  console.log(tableProduct)
 
   const updateHanlder = (update) => {
     setProducts([...update])

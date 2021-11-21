@@ -95,7 +95,7 @@ const OrderList = () => {
             <Nav.Link ><Button variant='outline-primary' size='sm'>Home</Button></Nav.Link>
           </LinkContainer>
           <LinkContainer to='productlist' style={{ color: 'black' }}>
-            <Nav.Link ><Button variant='outline-primary' size='sm'>Management</Button></Nav.Link>
+            <Nav.Link ><Button variant='outline-primary' size='sm'>Products List</Button></Nav.Link>
           </LinkContainer>
           <LinkContainer to='/' style={{ color: 'black' }}>
             <Nav.Link onClick={handleLogOut}><Button variant='outline-primary' size='sm'>Log out</Button></Nav.Link>

@@ -43,7 +43,6 @@ const LoadForm = ({ onClose, imageUpdate, rowId }) => {
     for (let product of tableProduct) {
       if (rowId === product.productId) {
         selectedProduct = product
-        console.log('selected',selectedProduct)
       }
     }
 
