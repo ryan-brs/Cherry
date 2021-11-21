@@ -41,7 +41,6 @@ const ProductList = () => {
     setShowDialog(false)
   }
 
-
   useEffect(() => {
     axios.get(`${baseURL}/Product`)
       .then((response) => {
@@ -55,7 +54,7 @@ const ProductList = () => {
       })
   }, []);
 
-  const product = products.map((product) => {
+   const tableProduct = products.map((product) => {
     return {
       productId: product.productId,
       productName: product.productName,
@@ -66,6 +65,7 @@ const ProductList = () => {
       imageUrl: product.imageUrl
     }
   })
+  console.log(tableProduct)
 
   const updateHanlder = (update) => {
     setProducts([...update])
@@ -83,7 +83,7 @@ const ProductList = () => {
       "price1212": parseInt(newData.price1212)
     }, header)
       .then((response) => {
-        const addProduct = [...product, newData]
+        const addProduct = [...tableProduct, newData]
         setProducts([...addProduct])
         resolve()
       })
@@ -99,7 +99,7 @@ const ProductList = () => {
     axios.delete(`${baseURL}/Product/${oldData.productId}`)
       .then((response) => {
         const index = oldData.tableData.id;
-        const deleteProduct = [...product];
+        const deleteProduct = [...tableProduct];
         deleteProduct.splice(index, 1);
         setProducts([...deleteProduct]);
         resolve();
@@ -118,7 +118,7 @@ const ProductList = () => {
       "imageUrl": `{"url":"${newData.imageUrl}"}`
     })
       .then((response) => {
-        const dataUpdate = [...product];
+        const dataUpdate = [...tableProduct];
         const index = oldData.tableData.id;
         dataUpdate[index] = newData;
         setProducts([...dataUpdate]);
@@ -166,67 +166,74 @@ const ProductList = () => {
         </Nav>
       </Container>
 
-      {showDialog && <LoadForm onClose={toggleCloseDialog}
-        products={product}
+      {/* {showDialog && <LoadForm onClose={toggleCloseDialog}
+        products={tableProduct}
         imageUpdate={updateHanlder}
         rowId={rowId}
-      />}
+      />} */}
 
-        <MaterialTable
-          icons={tableIcons}
-          const columns={[
-            {
-              title: 'Product Image',
-              field: 'imageUrl',
-              render: product => {
-                return (
-                  product.imageUrl ? <img style={{ width: '110px', height: '120px' }} src={product.imageUrl} alt='' /> : <span>No Product Img</span>
+      <MaterialTable
+        icons={tableIcons}
+        const columns={[
+
+          {
+            title: 'Product Image',
+            field: 'imageUrl',
+            render: tableProduct => {
+              return (
+                showDialog && rowId === tableProduct.productId ?
+                  <LoadForm onClose={toggleCloseDialog}
+                    // products={[tableProduct]}
+                    imageUpdate={updateHanlder}
+                    rowId={rowId}
+                  /> :
+                  tableProduct.imageUrl ? <img style={{ width: '110px', height: '120px' }} src={tableProduct.imageUrl} alt='' /> : <span>No Product Img</span>
                 )
               }
             },
-            // { title: "Product ID", field: "productId" },
-            { title: "Product", field: "productName", maxWidth:'200px' },
-            { title: "Description", field: "desciption" },
-            { title: "Price1212", field: "price1212" },
+            // {title: "Product ID", field: "productId" },
+      {title: "Product", field: "productName", maxWidth:'200px' },
+      {title: "Description", field: "desciption" },
+      {title: "Price1212", field: "price1212" },
           ]}
-          data={product}
-          options={
-            {
-              actionsColumnIndex: -1, addRowPosition: "first",
-              showTitle: false,
-              headerStyle: { position: 'sticky', top: 0 }, maxBodyHeight: '70vh',
-            }
-          }
-  
-          actions={[
-            {
-              icon: () => <UploadFileIcon/>,
-              onClick: (event, rowData) => {
-                toggleShowDialog()
-                setRowId(rowData.productId)
-              },
-              tooltip: 'Edit Product Image',
-            }
-          ]}
-  
-          editable={{
-            onRowAdd: newData =>
-              new Promise((resolve) => {
-                addRowHandler(newData, resolve)
-              }),
-  
-            onRowDelete: oldData =>
-              new Promise((resolve) => {
-                deleteRowHanlder(oldData, resolve)
-              }),
-  
-            onRowUpdate: (newData, oldData) =>
-              new Promise((resolve) => {
-                updateRowHanlder(newData, oldData, resolve)
-              })
-          }}
+      data={tableProduct}
+      options={
+        {
+          actionsColumnIndex: -1, addRowPosition: "first",
+          showTitle: false,
+          headerStyle: { position: 'sticky', top: 0 }, maxBodyHeight: '70vh',
+        }
+      }
+
+      actions={[
+        {
+          icon: () => <UploadFileIcon />,
+          onClick: (event, rowData) => {
+            toggleShowDialog()
+            setRowId(rowData.productId)
+          },
+          tooltip: 'Edit Product Image',
+        }
+      ]}
+
+      editable={{
+        onRowAdd: newData =>
+          new Promise((resolve) => {
+            addRowHandler(newData, resolve)
+          }),
+
+        onRowDelete: oldData =>
+          new Promise((resolve) => {
+            deleteRowHanlder(oldData, resolve)
+          }),
+
+        onRowUpdate: (newData, oldData) =>
+          new Promise((resolve) => {
+            updateRowHanlder(newData, oldData, resolve)
+          })
+      }}
         />
-      </div>
+    </div>
   )
 }
 

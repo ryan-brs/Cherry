@@ -1,22 +1,49 @@
 import axios from 'axios'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import '../App.css'
 import { Form, Button, Container } from 'react-bootstrap'
 
 
-const LoadForm = ({ onClose, imageUpdate, products, rowId }) => {
-  // const [inputId, setInputId] = useState()
+const LoadForm = ({ onClose, imageUpdate, rowId }) => {
+  const [products, setProducts] = useState([])
+  const baseURL = "http://206.189.39.185:5031/api"
   const [upload, setUpload] = useState()
   const UploadImage = (e) => {
     e.preventDefault()
     setUpload(e.target.files[0])
   }
 
+  useEffect(() => {
+    axios.get(`${baseURL}/Product`)
+      .then((response) => {
+        let data = response.data.data
+        for (let prod of data) {
+          if (prod.imageUrl) {
+            prod.imageUrl = JSON.parse(prod.imageUrl).url
+          }
+        }
+        setProducts(data);
+      })
+  }, []);
+
+   const tableProduct = products.map((product) => {
+    return {
+      productId: product.productId,
+      productName: product.productName,
+      desciption: product.desciption,
+      price: product.price,
+      price1212: product.price1212,
+      productAgent: product.productAgent,
+      imageUrl: product.imageUrl
+    }
+  })
+
   const matchId = (imageUrl) => {
     let selectedProduct = {}
-    for (let product of products) {
+    for (let product of tableProduct) {
       if (rowId === product.productId) {
         selectedProduct = product
+        console.log('selected',selectedProduct)
       }
     }
 
@@ -27,11 +54,11 @@ const LoadForm = ({ onClose, imageUpdate, products, rowId }) => {
       "price1212": parseInt(selectedProduct.price1212),
       "imageUrl": `{"url":"${imageUrl}"}`
     }
+
     axios.put("http://206.189.39.185:5031/api/Product/ProductUpdate", Url)
       .then(() => {
-        const dataUpdate = [...products];
-        const index = selectedProduct.tableData.id;
-        dataUpdate[index].imageUrl = imageUrl
+        selectedProduct.imageUrl = imageUrl
+        const dataUpdate = [...tableProduct]
         imageUpdate(dataUpdate)
       })
       .catch(error => {
@@ -62,7 +89,7 @@ const LoadForm = ({ onClose, imageUpdate, products, rowId }) => {
       alignItems:'flex-end', 
       marginTop:'30px' }}>
       <Form.Group controlId="formFile" className="mb-3">
-        <h4>Choose Image</h4>
+        <h6>Choose Image</h6>
         <Form.Control type="file"  onChange={e => UploadImage(e)} />
       </Form.Group>
       <Button
