@@ -23,6 +23,7 @@ import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import LoadForm from './loadForm';
 import cookie from 'react-cookies'
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 
 
 
@@ -34,7 +35,10 @@ const ProductList = () => {
   const baseURL = "http://206.189.39.185:5031/api"
 
   const toggleShowDialog = () => {
-    setShowDialog(!showDialog)
+    setShowDialog(true)
+  }
+  const toggleCloseDialog = () => {
+    setShowDialog(false)
   }
 
 
@@ -111,6 +115,7 @@ const ProductList = () => {
       "productName": newData.productName,
       "desciption": newData.desciption,
       "price1212": parseInt(newData.price1212),
+      "imageUrl": `{"url":"${newData.imageUrl}"}`
     })
       .then((response) => {
         const dataUpdate = [...product];
@@ -161,67 +166,67 @@ const ProductList = () => {
         </Nav>
       </Container>
 
-      {showDialog && <LoadForm onClose={toggleShowDialog}
+      {showDialog && <LoadForm onClose={toggleCloseDialog}
         products={product}
         imageUpdate={updateHanlder}
         rowId={rowId}
       />}
 
-      <MaterialTable
-        icons={tableIcons}
-        const columns={[
-          {
-            title: 'Product Image',
-            field: 'imageUrl',
-            render: product => {
-              return (
-                product.imageUrl ? <img style={{ width: '110px', height: '120px' }} src={product.imageUrl} alt='' /> : <span>No Product Img</span>
-              )
-            }
-          },
-          { title: "Product ID", field: "productId" },
-          { title: "Product", field: "productName" },
-          { title: "Description", field: "desciption" },
-          { title: "Price1212", field: "price1212" },
-        ]}
-        data={product}
-        options={
-          {
-            actionsColumnIndex: -1, addRowPosition: "first",
-            showTitle: false,
-            headerStyle: { position: 'sticky', top: 0 }, maxBodyHeight: '70vh'
-          }
-        }
-
-        actions={[
-          {
-            icon: () => <Button style={{ fontSize: 'small'}}>Upload Image</Button>,
-            onClick: (event, rowData) => {
-              toggleShowDialog()
-              setRowId(rowData.productId)
+        <MaterialTable
+          icons={tableIcons}
+          const columns={[
+            {
+              title: 'Product Image',
+              field: 'imageUrl',
+              render: product => {
+                return (
+                  product.imageUrl ? <img style={{ width: '110px', height: '120px' }} src={product.imageUrl} alt='' /> : <span>No Product Img</span>
+                )
+              }
             },
-            tooltip: 'Upload Product Image',
+            // { title: "Product ID", field: "productId" },
+            { title: "Product", field: "productName", maxWidth:'200px' },
+            { title: "Description", field: "desciption" },
+            { title: "Price1212", field: "price1212" },
+          ]}
+          data={product}
+          options={
+            {
+              actionsColumnIndex: -1, addRowPosition: "first",
+              showTitle: false,
+              headerStyle: { position: 'sticky', top: 0 }, maxBodyHeight: '70vh',
+            }
           }
-        ]}
-
-        editable={{
-          onRowAdd: newData =>
-            new Promise((resolve) => {
-              addRowHandler(newData, resolve)
-            }),
-
-          onRowDelete: oldData =>
-            new Promise((resolve) => {
-              deleteRowHanlder(oldData, resolve)
-            }),
-
-          onRowUpdate: (newData, oldData) =>
-            new Promise((resolve) => {
-              updateRowHanlder(newData, oldData, resolve)
-            })
-        }}
-      />
-    </div>
+  
+          actions={[
+            {
+              icon: () => <UploadFileIcon/>,
+              onClick: (event, rowData) => {
+                toggleShowDialog()
+                setRowId(rowData.productId)
+              },
+              tooltip: 'Edit Product Image',
+            }
+          ]}
+  
+          editable={{
+            onRowAdd: newData =>
+              new Promise((resolve) => {
+                addRowHandler(newData, resolve)
+              }),
+  
+            onRowDelete: oldData =>
+              new Promise((resolve) => {
+                deleteRowHanlder(oldData, resolve)
+              }),
+  
+            onRowUpdate: (newData, oldData) =>
+              new Promise((resolve) => {
+                updateRowHanlder(newData, oldData, resolve)
+              })
+          }}
+        />
+      </div>
   )
 }
 

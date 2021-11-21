@@ -13,22 +13,24 @@ const LoadForm = ({ onClose, imageUpdate, products, rowId }) => {
   }
 
   const matchId = (imageUrl) => {
-    let seletedProduct = {}
+    let selectedProduct = {}
     for (let product of products) {
       if (rowId === product.productId) {
-        seletedProduct = product
+        selectedProduct = product
       }
     }
 
     const Url = {
-      "productId": seletedProduct.productId,
-      "productName": seletedProduct.productName,
+      "productId": selectedProduct.productId,
+      "productName": selectedProduct.productName,
+      "desciption": selectedProduct.desciption,
+      "price1212": parseInt(selectedProduct.price1212),
       "imageUrl": `{"url":"${imageUrl}"}`
     }
     axios.put("http://206.189.39.185:5031/api/Product/ProductUpdate", Url)
       .then(() => {
         const dataUpdate = [...products];
-        const index = seletedProduct.tableData.id;
+        const index = selectedProduct.tableData.id;
         dataUpdate[index].imageUrl = imageUrl
         imageUpdate(dataUpdate)
       })
