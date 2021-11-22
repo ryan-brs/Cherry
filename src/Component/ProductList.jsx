@@ -165,11 +165,6 @@ const ProductList = () => {
         </Nav>
       </Container>
 
-      {/* {showDialog && <LoadForm onClose={toggleCloseDialog}
-        products={tableProduct}
-        imageUpdate={updateHanlder}
-        rowId={rowId}
-      />} */}
 
       <MaterialTable
         icons={tableIcons}
